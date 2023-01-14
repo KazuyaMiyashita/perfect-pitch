@@ -2,10 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>React App</title>
-    <script src="./bundle.js"></script>
+    <title>osmd-extended minimum sample</title>
+    <script src="./bundle.js" defer></script>
 </head>
     <body>
-        <h1>OpenSheetMusicDisplay Use Min</h1>
+        <h1>osmd-extended minimum sample</h1>
+        <label for="file-selector">select sheet file</label>
+        <select id="file-selector">
+            <option value="4dan-test.mxl">4dan-test.mxl</option>
+            <option value="4dan-test-2.mxl">4dan-test-2.mxl</option>
+        </select>
+        <select id="instrument-selector">
+            <option value="String_Ensemble_1">String Ensemble</option>
+            <option value="Acoustic_Grand_Piano">Acoustic Grand Piano</option>
+            <option value="Church_Organ">Church Organ</option>
+            <option value="Choir_Aahs">Choir Aahs</option>
+            <option value="Pad_1_new_age">Synth Pad</option>
+        </select>
+        <button id="play-stop" disabled>Play/Stop</button>
+        <div style="border: 1px solid black; width: 80%; height: 80%; overflow: scroll">
+            <div id="osmd-render-area"></div>
+        </div>
     </body>
 </html>
