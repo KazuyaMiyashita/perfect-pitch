@@ -41,7 +41,7 @@ const init = () => {
 
   const options = {
     autoResize: true,
-    drawTitle: false,
+    drawTitle: true,
     drawPartNames: false,
   }
   const osmd: OSMD = new OSMD(osmdRenderAreaDiv, options)

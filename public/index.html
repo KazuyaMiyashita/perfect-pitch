@@ -6,21 +6,33 @@
     <script src="./bundle.js" defer></script>
 </head>
     <body>
-        <h1>osmd-extended minimum sample</h1>
-        <label for="file-selector">select sheet file</label>
-        <select id="file-selector">
-            <option value="4dan-test.mxl">4dan-test.mxl</option>
-            <option value="4dan-test-2.mxl">4dan-test-2.mxl</option>
-        </select>
-        <select id="instrument-selector">
-            <option value="String_Ensemble_1">String Ensemble</option>
-            <option value="Acoustic_Grand_Piano">Acoustic Grand Piano</option>
-            <option value="Church_Organ">Church Organ</option>
-            <option value="Choir_Aahs">Choir Aahs</option>
-            <option value="Pad_1_new_age">Synth Pad</option>
-        </select>
-        <button id="play-stop" disabled>Play/Stop</button>
-        <div style="border: 1px solid black; width: 80%; height: 80%; overflow: scroll">
+        <h1 style="text-align: center">osmd-extended minimum sample</h1>
+        <div style="text-align: center">
+            <label for="file-selector">select sheet file</label>
+            <select id="file-selector">
+                <option value="challan380-001.musicxml">Challan 380 - 1</option>
+                <option value="challan380-002.musicxml">Challan 380 - 2</option>
+                <option value="challan380-003.musicxml">Challan 380 - 3</option>
+                <option value="challan380-004.musicxml">Challan 380 - 4</option>
+                <option value="challan380-005.musicxml">Challan 380 - 5</option>
+                <option value="challan380-006.musicxml">Challan 380 - 6</option>
+                <option value="challan380-007.musicxml">Challan 380 - 7</option>
+                <option value="challan380-008.musicxml">Challan 380 - 8</option>
+                <option value="challan380-009.musicxml">Challan 380 - 9</option>
+                <option value="challan380-010.musicxml">Challan 380 - 10</option>
+                <option value="challan380-091.musicxml">Challan 380 - 91</option>
+                <option value="challan380-131.musicxml">Challan 380 - 131</option>
+            </select>
+            <select id="instrument-selector">
+                <option value="String_Ensemble_1">String Ensemble</option>
+                <option value="Acoustic_Grand_Piano">Acoustic Grand Piano</option>
+                <option value="Church_Organ">Church Organ</option>
+                <option value="Choir_Aahs">Choir Aahs</option>
+                <option value="Pad_1_new_age">Synth Pad</option>
+            </select>
+            <button id="play-stop" disabled>Play/Stop</button>
+        </div>
+        <div style="margin: 12px auto; box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px; border-radius: 5px; width: 96%; height: auto; overflow: scroll">
             <div id="osmd-render-area"></div>
         </div>
     </body>
