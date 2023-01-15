@@ -5,7 +5,7 @@ import {
   OpenSheetMusicDisplay as OSMD,
   PlaybackManager,
   PlaybackState,
-  MidiInstrument,
+  MidiInstrument, TransposeCalculator,
 } from 'opensheetmusicdisplay'
 
 const init = () => {
@@ -35,16 +35,27 @@ const init = () => {
   }
 
   const osmdRenderAreaDiv = getElementByIdOrError('osmd-render-area') as HTMLDivElement
-  const fileSelector = getElementByIdOrError('file-selector') as HTMLSelectElement
+  const osmdRenderAreaAboveDiv = getElementByIdOrError('osmd-render-area-above') as HTMLDivElement
+  const taskSelector = getElementByIdOrError('task-selector') as HTMLSelectElement
+  const staffSelector = getElementByIdOrError('staff-selector') as HTMLSelectElement
   const instrumentSelector = getElementByIdOrError('instrument-selector') as HTMLSelectElement
+  const transposeInput = getElementByIdOrError('transpose') as HTMLInputElement
   const playStopButton = document.getElementById('play-stop') as HTMLButtonElement
+  const showHideButton = document.getElementById('show-hide') as HTMLButtonElement
+  const nextButton = document.getElementById('next') as HTMLButtonElement
+
 
   const options = {
     autoResize: true,
-    drawTitle: true,
+    drawTitle: false,
     drawPartNames: false,
   }
   const osmd: OSMD = new OSMD(osmdRenderAreaDiv, options)
+  osmd.TransposeCalculator = new TransposeCalculator()
+
+  const getFileName = (task: string, staff: string) => {
+    return `${task}-${staff}.musicxml`
+  }
 
   const currentSelectedInstrument = () => {
     const instrValue = instrumentSelector.options[instrumentSelector.selectedIndex].value
@@ -71,16 +82,36 @@ const init = () => {
     })
   }
 
+
   const loadCurrentSelectFile = () => {
-    const filename = fileSelector.options[fileSelector.selectedIndex].value
+    const task = taskSelector.options[taskSelector.selectedIndex].value
+    const staff = staffSelector.options[staffSelector.selectedIndex].value
+    const filename = getFileName(task, staff)
     return osmd.load(filename).then(() => {
       console.log(`${filename} loaded.`)
+
+      const value = parseInt(transposeInput.value)
+      osmd.Sheet.Transpose = value
+      osmd.updateGraphic()
+
       osmd.render()
       return setSheetPlaybackContent()
     })
   }
-  fileSelector.addEventListener('change', () => buttonDisabledOnLoading(loadCurrentSelectFile()))
+  taskSelector.addEventListener('change', () => buttonDisabledOnLoading(loadCurrentSelectFile()))
+  staffSelector.addEventListener('change', () => buttonDisabledOnLoading(loadCurrentSelectFile()))
+
   buttonDisabledOnLoading(loadCurrentSelectFile()).then(() => {})
+
+  // const transpose = () => {
+  //   if (!osmd.Sheet) {
+  //     return
+  //   }
+  //   const value = parseInt(transposeInput.value)
+  //   osmd.Sheet.Transpose = value
+  //   osmd.updateGraphic()
+  //   osmd.render()
+  // }
 
   const setSheetPlaybackContent = () => {
     return basicAudioPlayer.then(bap => {
@@ -106,7 +137,6 @@ const init = () => {
       playbackManager.initialize(osmd.Sheet.MusicPartManager)
       playbackManager.addListener(osmd.cursor)
       osmd.PlaybackManager = playbackManager
-
       console.log('setSheetPlaybackContent done')
       return
     })
@@ -133,6 +163,27 @@ const init = () => {
 
   const clickEventType = ((window.ontouchstart !== null) ? 'click' : 'touchend');
   playStopButton.addEventListener(clickEventType, playStop)
+
+  const next = () => {
+    transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
+    taskSelector.selectedIndex = Math.floor(Math.random() * taskSelector.options.length)
+    osmdRenderAreaAboveDiv.classList.add("hide-osmd")
+    buttonDisabledOnLoading(loadCurrentSelectFile()).then(() => {})
+  }
+  transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
+  taskSelector.selectedIndex = Math.floor(Math.random() * taskSelector.options.length)
+  nextButton.addEventListener(clickEventType, next)
+
+
+  const switchShowHide = () => {
+    if (osmdRenderAreaAboveDiv.classList.contains("hide-osmd")) {
+      osmdRenderAreaAboveDiv.classList.remove("hide-osmd")
+    } else {
+      osmdRenderAreaAboveDiv.classList.add("hide-osmd")
+    }
+  }
+  showHideButton.addEventListener(clickEventType, switchShowHide)
+
 
 }
 
