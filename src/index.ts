@@ -39,9 +39,10 @@ const init = () => {
   const taskSelector = getElementByIdOrError('task-selector') as HTMLSelectElement
   const staffSelector = getElementByIdOrError('staff-selector') as HTMLSelectElement
   const instrumentSelector = getElementByIdOrError('instrument-selector') as HTMLSelectElement
-  const transposeInput = getElementByIdOrError('transpose') as HTMLInputElement
+  const transposeInput = getElementByIdOrError('transpose-input') as HTMLButtonElement
   const playStopButton = document.getElementById('play-stop') as HTMLButtonElement
   const showHideButton = document.getElementById('show-hide') as HTMLButtonElement
+  const transposeButton = getElementByIdOrError('transpose-button') as HTMLButtonElement
   const nextButton = document.getElementById('next') as HTMLButtonElement
 
 
@@ -74,7 +75,7 @@ const init = () => {
     }
   }
 
-  const buttonDisabledOnLoading = <T> (promise: Promise<T>) => {
+  const buttonDisabledOnLoading = <T>(promise: Promise<T>) => {
     playStopButton.disabled = true
     return promise.then(p => {
       playStopButton.disabled = false
@@ -102,16 +103,6 @@ const init = () => {
   staffSelector.addEventListener('change', () => buttonDisabledOnLoading(loadCurrentSelectFile()))
 
   buttonDisabledOnLoading(loadCurrentSelectFile()).then(() => {})
-
-  // const transpose = () => {
-  //   if (!osmd.Sheet) {
-  //     return
-  //   }
-  //   const value = parseInt(transposeInput.value)
-  //   osmd.Sheet.Transpose = value
-  //   osmd.updateGraphic()
-  //   osmd.render()
-  // }
 
   const setSheetPlaybackContent = () => {
     return basicAudioPlayer.then(bap => {
@@ -184,6 +175,16 @@ const init = () => {
   }
   showHideButton.addEventListener(clickEventType, switchShowHide)
 
+  const transpose = () => {
+    transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
+    const value = parseInt(transposeInput.value)
+    osmd.Sheet.Transpose = value
+    osmd.updateGraphic()
+
+    osmd.render()
+    return setSheetPlaybackContent()
+  }
+  transposeButton.addEventListener(clickEventType, transpose)
 
 }
 
