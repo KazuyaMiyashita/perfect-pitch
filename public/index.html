@@ -2,54 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PERFECT PITCH LEARNING MACHINE</title>
     <script src="./bundle.js" defer></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
-<h1 style="text-align: center">PERFECT PITCH LEARNING MACHINE</h1>
-<div style="text-align: center">
-    <label for="task-selector" style="display: none">select sheet file</label>
-    <select id="task-selector" style="display: none">
-        <option value="chouon-001">chouon-001</option>
-        <option value="chouon-002">chouon-002</option>
-        <option value="chouon-003">chouon-003</option>
-        <option value="chouon-004">chouon-004</option>
-        <option value="chouon-005">chouon-005</option>
-        <option value="chouon-006">chouon-006</option>
-        <option value="chouon-007">chouon-007</option>
-        <option value="chouon-008">chouon-008</option>
-        <option value="chouon-009">chouon-009</option>
-        <option value="chouon-010">chouon-010</option>
-        <option value="chouon-011">chouon-011</option>
-        <option value="chouon-012">chouon-012</option>
-        <option value="chouon-013">chouon-013</option>
-        <option value="chouon-014">chouon-014</option>
-        <option value="chouon-015">chouon-015</option>
-    </select>
-    <div class="form-inline">
-        <select id="staff-selector" class="form-control">
-            <option value="grand-staff">Grand Staff</option>
-            <option value="four-staves">Four Staves</option>
+<div class="container-xl">
+    <h1 class="text-center mt-4 mb-2 p-2">PERFECT PITCH LEARNING MACHINE</h1>
+    <div class="container-sm">
+        <select id="task-selector" style="display: none">
+            <option value="chouon-001">chouon-001</option>
+            <option value="chouon-002">chouon-002</option>
+            <option value="chouon-003">chouon-003</option>
+            <option value="chouon-004">chouon-004</option>
+            <option value="chouon-005">chouon-005</option>
+            <option value="chouon-006">chouon-006</option>
+            <option value="chouon-007">chouon-007</option>
+            <option value="chouon-008">chouon-008</option>
+            <option value="chouon-009">chouon-009</option>
+            <option value="chouon-010">chouon-010</option>
+            <option value="chouon-011">chouon-011</option>
+            <option value="chouon-012">chouon-012</option>
+            <option value="chouon-013">chouon-013</option>
+            <option value="chouon-014">chouon-014</option>
+            <option value="chouon-015">chouon-015</option>
         </select>
-        <select id="instrument-selector" class="form-control">
-            <option value="String_Ensemble_1">String Ensemble</option>
-            <option value="Acoustic_Grand_Piano">Acoustic Grand Piano</option>
-            <option value="Church_Organ">Church Organ</option>
-            <option value="Choir_Aahs">Choir Aahs</option>
-            <option value="Pad_1_new_age">Synth Pad</option>
-        </select>
-        <input type="number" id="transpose-input" value="0" style="display: none" />
-        <button id="play-stop"  class="btn btn-default" disabled>Play/Stop</button>
-        <button id="show-hide" class="btn btn-default">Show/Hide</button>
-        <button id="next" class="btn btn-default">Next Task</button>
-        <button id="transpose-button" class="btn btn-default" style="display: none">Transpose</button>
+        <div class="row mt-4 mb-4">
+            <div class="col-3">
+                <select id="staff-selector" class="form-select w-100">
+                    <option value="grand-staff">Grand Staff</option>
+                    <option value="four-staves">Four Staves</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <select id="instrument-selector" class="form-select w-100">
+                    <option value="String_Ensemble_1">String Ensemble</option>
+                    <option value="Acoustic_Grand_Piano">Acoustic Grand Piano</option>
+                    <option value="Church_Organ">Church Organ</option>
+                    <option value="Choir_Aahs">Choir Aahs</option>
+                    <option value="Pad_1_new_age">Synth Pad</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <input type="number" id="transpose-input" value="0" style="display: none"/>
+                <button id="play-stop" class="btn btn-primary w-100" disabled>Play/Stop</button>
+            </div>
+            <div class="col-2">
+                <button id="show-hide" class="btn btn-outline-primary w-100">Show/Hide</button>
+            </div>
+            <div class="col-2">
+                <button id="next" class="btn btn-outline-primary w-100">Next Task</button>
+                <button id="transpose-button" class="btn btn-light" style="display: none">Transpose</button>
+            </div>
+        </div>
+    </div>
+    <div id="osmd-render-area-wrapper">
+                <div id="osmd-render-area-above" class="hide-osmd"></div>
+<!--        <div id="osmd-render-area-above"></div>-->
+        <div id="osmd-render-area"></div>
     </div>
 </div>
-<div id="osmd-render-area-wrapper">
-    <div id="osmd-render-area-above" class="hide-osmd"></div>
-    <div id="osmd-render-area"></div>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
 </body>
 </html>
