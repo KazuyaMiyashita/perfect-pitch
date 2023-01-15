@@ -159,7 +159,7 @@ const init = () => {
     transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
     taskSelector.selectedIndex = Math.floor(Math.random() * taskSelector.options.length)
     osmdRenderAreaAboveDiv.classList.add("hide-osmd")
-    buttonDisabledOnLoading(loadCurrentSelectFile()).then(() => {})
+    return buttonDisabledOnLoading(loadCurrentSelectFile()).then(() => {})
   }
   transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
   taskSelector.selectedIndex = Math.floor(Math.random() * taskSelector.options.length)
@@ -175,16 +175,49 @@ const init = () => {
   }
   showHideButton.addEventListener(clickEventType, switchShowHide)
 
-  const transpose = () => {
-    transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
-    const value = parseInt(transposeInput.value)
+  const transpose = (num: number) => {
+    const value = Math.floor(num)
+    transposeInput.value = num.toString()
     osmd.Sheet.Transpose = value
     osmd.updateGraphic()
 
     osmd.render()
     return setSheetPlaybackContent()
   }
-  transposeButton.addEventListener(clickEventType, transpose)
+
+  const transposeRandom = () => {
+    return transpose((Math.floor(Math.random() * (6 - (-5) + 1) + (-5))))
+  }
+
+  const transposeUp = () => {
+    return transpose(parseInt(transposeInput.value) + 1)
+  }
+  const transposeDown = () => {
+    return transpose(parseInt(transposeInput.value) - 1)
+  }
+
+  transposeButton.addEventListener(clickEventType, transposeRandom)
+
+  const keyup = (e: KeyboardEvent) => {
+    if (e.code == 'Space') {
+      playStop().then(() => {})
+    } else if (e.code == 'Enter') {
+      switchShowHide()
+    } else if (e.code == 'ArrowRight') {
+      next().then(() => {})
+    } else if (e.code == 'ArrowUp') {
+      transposeUp().then(() => {})
+    } else if (e.code == 'ArrowDown') {
+      transposeDown().then(() => {})
+    } else if (e.code == 'KeyT') {
+      transposeRandom().then(() => {})
+    }
+
+
+    return false
+  }
+
+  document.addEventListener('keyup', keyup)
 
 }
 
