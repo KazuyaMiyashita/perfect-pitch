@@ -76,6 +76,16 @@ const init = () => {
     './sheets/chouon-034-grand-staff.musicxml',
     './sheets/chouon-035-four-staves.musicxml',
     './sheets/chouon-035-grand-staff.musicxml',
+    './sheets/chouon-061-four-staves.musicxml',
+    './sheets/chouon-061-grand-staff.musicxml',
+    './sheets/chouon-062-four-staves.musicxml',
+    './sheets/chouon-062-grand-staff.musicxml',
+    './sheets/chouon-063-four-staves.musicxml',
+    './sheets/chouon-063-grand-staff.musicxml',
+    './sheets/chouon-064-four-staves.musicxml',
+    './sheets/chouon-064-grand-staff.musicxml',
+    './sheets/chouon-065-four-staves.musicxml',
+    './sheets/chouon-065-grand-staff.musicxml',
   ]
   const sheetDocumentsPromise: Promise<Map<string, Document>> = (() => {
     const domParser = new DOMParser()
