@@ -2,10 +2,11 @@ import {
   BasicAudioPlayer,
   IMessageViewer,
   LinearTimingSource,
+  MidiInstrument,
   OpenSheetMusicDisplay as OSMD,
   PlaybackManager,
   PlaybackState,
-  MidiInstrument, TransposeCalculator,
+  TransposeCalculator,
 } from 'opensheetmusicdisplay'
 
 const init = () => {
@@ -18,14 +19,73 @@ const init = () => {
   context.suspend().then(_ => {})
 
   const basicAudioPlayer: Promise<BasicAudioPlayer> = (() => {
+    const nameToUrl = (name: string, font: string, format: string) => {
+      return `./soundfonts/${name}-mp3.js`
+    }
     const basicAudioPlayer = new BasicAudioPlayer()
+    basicAudioPlayer.SoundfontInstrumentOptions.nameToUrl = nameToUrl
     return Promise.all([
       basicAudioPlayer.loadSoundFont(MidiInstrument.String_Ensemble_1),
       basicAudioPlayer.loadSoundFont(MidiInstrument.Acoustic_Grand_Piano),
       basicAudioPlayer.loadSoundFont(MidiInstrument.Church_Organ),
       basicAudioPlayer.loadSoundFont(MidiInstrument.Choir_Aahs),
-      basicAudioPlayer.loadSoundFont(MidiInstrument.Pad_1_new_age)
+      basicAudioPlayer.loadSoundFont(MidiInstrument.Pad_1_new_age),
+      basicAudioPlayer.loadSoundFont(MidiInstrument.Percussion), // PlaybackManager loads it
+      basicAudioPlayer.loadSoundFont(MidiInstrument.Woodblock), // PlaybackManager loads it
     ]).then(() => basicAudioPlayer)
+  })()
+
+  const sheets = [
+    './sheets/chouon-001-four-staves.musicxml',
+    './sheets/chouon-001-grand-staff.musicxml',
+    './sheets/chouon-002-four-staves.musicxml',
+    './sheets/chouon-002-grand-staff.musicxml',
+    './sheets/chouon-003-four-staves.musicxml',
+    './sheets/chouon-003-grand-staff.musicxml',
+    './sheets/chouon-004-four-staves.musicxml',
+    './sheets/chouon-004-grand-staff.musicxml',
+    './sheets/chouon-005-four-staves.musicxml',
+    './sheets/chouon-005-grand-staff.musicxml',
+    './sheets/chouon-006-four-staves.musicxml',
+    './sheets/chouon-006-grand-staff.musicxml',
+    './sheets/chouon-007-four-staves.musicxml',
+    './sheets/chouon-007-grand-staff.musicxml',
+    './sheets/chouon-008-four-staves.musicxml',
+    './sheets/chouon-008-grand-staff.musicxml',
+    './sheets/chouon-009-four-staves.musicxml',
+    './sheets/chouon-009-grand-staff.musicxml',
+    './sheets/chouon-010-four-staves.musicxml',
+    './sheets/chouon-010-grand-staff.musicxml',
+    './sheets/chouon-011-four-staves.musicxml',
+    './sheets/chouon-011-grand-staff.musicxml',
+    './sheets/chouon-012-four-staves.musicxml',
+    './sheets/chouon-012-grand-staff.musicxml',
+    './sheets/chouon-013-four-staves.musicxml',
+    './sheets/chouon-013-grand-staff.musicxml',
+    './sheets/chouon-014-four-staves.musicxml',
+    './sheets/chouon-014-grand-staff.musicxml',
+    './sheets/chouon-015-four-staves.musicxml',
+    './sheets/chouon-015-grand-staff.musicxml',
+    './sheets/chouon-031-four-staves.musicxml',
+    './sheets/chouon-031-grand-staff.musicxml',
+    './sheets/chouon-032-four-staves.musicxml',
+    './sheets/chouon-032-grand-staff.musicxml',
+    './sheets/chouon-033-four-staves.musicxml',
+    './sheets/chouon-033-grand-staff.musicxml',
+    './sheets/chouon-034-four-staves.musicxml',
+    './sheets/chouon-034-grand-staff.musicxml',
+    './sheets/chouon-035-four-staves.musicxml',
+    './sheets/chouon-035-grand-staff.musicxml',
+  ]
+  const sheetDocumentsPromise: Promise<Map<string, Document>> = (() => {
+    const domParser = new DOMParser()
+    return Promise.all(sheets.map(sheet => {
+      return fetch(sheet).then(res => res.text()).then(data => domParser.parseFromString(data, 'text/xml'))
+    })).then(all => {
+      const map: Map<string, Document> = new Map()
+      sheets.forEach((e, i) => map.set(e, all[i]))
+      return map
+    })
   })()
 
   const getElementByIdOrError = (elementId: string) => {
@@ -42,8 +102,12 @@ const init = () => {
   const transposeInput = getElementByIdOrError('transpose-input') as HTMLButtonElement
   const playStopButton = document.getElementById('play-stop') as HTMLButtonElement
   const showHideButton = document.getElementById('show-hide') as HTMLButtonElement
-  const transposeButton = getElementByIdOrError('transpose-button') as HTMLButtonElement
+  const transposeDownButton = getElementByIdOrError('transpose-down') as HTMLButtonElement
+  const transposeRandomButton = getElementByIdOrError('transpose-random') as HTMLButtonElement
+  const transposeUpButton = getElementByIdOrError('transpose-up') as HTMLButtonElement
   const nextButton = document.getElementById('next') as HTMLButtonElement
+  const autoHideCheckbox = document.getElementById('auto-hide') as HTMLInputElement
+  const autoPlayCheckbox = document.getElementById('auto-play') as HTMLInputElement
 
 
   const options = {
@@ -55,7 +119,7 @@ const init = () => {
   osmd.TransposeCalculator = new TransposeCalculator()
 
   const getFileName = (task: string, staff: string) => {
-    return `${task}-${staff}.musicxml`
+    return `./sheets/${task}-${staff}.musicxml`
   }
 
   const currentSelectedInstrument = () => {
@@ -88,15 +152,17 @@ const init = () => {
     const task = taskSelector.options[taskSelector.selectedIndex].value
     const staff = staffSelector.options[staffSelector.selectedIndex].value
     const filename = getFileName(task, staff)
-    return osmd.load(filename).then(() => {
-      console.log(`${filename} loaded.`)
+    return sheetDocumentsPromise.then(sheetDocuments => {
+      const doc: Document = sheetDocuments.get(filename)!
+      return osmd.load(doc).then(() => {
+        console.log(`${filename} loaded.`)
 
-      const value = parseInt(transposeInput.value)
-      osmd.Sheet.Transpose = value
-      osmd.updateGraphic()
+        osmd.Sheet.Transpose = parseInt(transposeInput.value)
+        osmd.updateGraphic()
 
-      osmd.render()
-      return setSheetPlaybackContent()
+        osmd.render()
+        return setSheetPlaybackContent()
+      })
     })
   }
   taskSelector.addEventListener('change', () => buttonDisabledOnLoading(loadCurrentSelectFile()))
@@ -106,6 +172,12 @@ const init = () => {
 
   const setSheetPlaybackContent = () => {
     return basicAudioPlayer.then(bap => {
+      if (osmd.PlaybackManager) {
+        if (osmd.PlaybackManager.RunningState == PlaybackState.Running) {
+          osmd.PlaybackManager.pause().then(() => osmd.PlaybackManager.reset())
+        }
+      }
+
       const timingSource = new LinearTimingSource()
       const messageViewer: IMessageViewer = {
         MessageOccurred: (tpe: any, mes: any) => {console.log(`message: tpe: ${tpe}, mes: ${mes}`)}
@@ -160,8 +232,14 @@ const init = () => {
   const next = () => {
     transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
     taskSelector.selectedIndex = Math.floor(Math.random() * taskSelector.options.length)
-    osmdRenderAreaAboveDiv.classList.add("hide-osmd")
-    return buttonDisabledOnLoading(loadCurrentSelectFile()).then(() => {})
+    if (autoHideCheckbox.checked) {
+      osmdRenderAreaAboveDiv.classList.add("hide-osmd")
+    }
+    if (autoPlayCheckbox.checked) {
+      return buttonDisabledOnLoading(loadCurrentSelectFile().then(() => playStop())).then(() => {})
+    } else {
+      return buttonDisabledOnLoading(loadCurrentSelectFile()).then(() => {})
+    }
   }
   transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
   taskSelector.selectedIndex = Math.floor(Math.random() * taskSelector.options.length)
@@ -190,15 +268,16 @@ const init = () => {
   const transposeRandom = () => {
     return transpose((Math.floor(Math.random() * (6 - (-5) + 1) + (-5))))
   }
-
-  const transposeUp = () => {
-    return transpose(parseInt(transposeInput.value) + 1)
-  }
   const transposeDown = () => {
     return transpose(parseInt(transposeInput.value) - 1)
   }
-
-  transposeButton.addEventListener(clickEventType, transposeRandom)
+  const transposeUp = () => {
+    return transpose(parseInt(transposeInput.value) + 1)
+  }
+  
+  transposeDownButton.addEventListener(clickEventType, transposeDown)
+  transposeRandomButton.addEventListener(clickEventType, transposeRandom)
+  transposeUpButton.addEventListener(clickEventType, transposeUp)
 
   const keyup = (e: KeyboardEvent) => {
     if (e.code == 'Space') {

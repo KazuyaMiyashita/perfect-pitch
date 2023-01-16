@@ -35,14 +35,14 @@
             <option value="chouon-034">chouon-034</option>
             <option value="chouon-035">chouon-035</option>
         </select>
-        <div class="row mt-4 mb-4">
-            <div class="col-3">
+        <div class="row mt-4 mb-2">
+            <div class="col-2">
                 <select id="staff-selector" class="form-select w-100">
                     <option value="grand-staff">Grand Staff</option>
                     <option value="four-staves">Four Staves</option>
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <select id="instrument-selector" class="form-select w-100">
                     <option value="String_Ensemble_1">String Ensemble</option>
                     <option value="Acoustic_Grand_Piano">Acoustic Grand Piano</option>
@@ -60,15 +60,37 @@
             </div>
             <div class="col-2">
                 <button id="next" class="btn btn-outline-primary w-100">Next Task</button>
-                <button id="transpose-button" class="btn btn-light" style="display: none">Transpose</button>
+            </div>
+            <div class="col-2">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="auto-hide">
+                    <label class="form-check-label" for="auto-hide">
+                        Auto hide
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="auto-play">
+                    <label class="form-check-label" for="auto-play">
+                        Auto play
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2 mb-4">
+            <div class="col-8"></div>
+            <div class="btn-group btn-group-sm col-4" role="group" aria-label="transpose function">
+                <button type="button" id="transpose-down" class="btn btn-outline-primary w-25">Down</button>
+                <button type="button" id="transpose-random" class="btn btn-outline-primary w-50">Transpose Randomly</button>
+                <button type="button" id="transpose-up" class="btn btn-outline-primary w-25">Up</button>
             </div>
         </div>
     </div>
     <div id="osmd-render-area-wrapper">
-                <div id="osmd-render-area-above" class="hide-osmd"></div>
-<!--        <div id="osmd-render-area-above"></div>-->
+        <!--                <div id="osmd-render-area-above" class="hide-osmd"></div>-->
+        <div id="osmd-render-area-above"></div>
         <div id="osmd-render-area"></div>
     </div>
+    <div>20230117.001</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
