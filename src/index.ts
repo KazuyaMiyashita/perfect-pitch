@@ -274,7 +274,7 @@ const init = () => {
   const transposeUp = () => {
     return transpose(parseInt(transposeInput.value) + 1)
   }
-  
+
   transposeDownButton.addEventListener(clickEventType, transposeDown)
   transposeRandomButton.addEventListener(clickEventType, transposeRandom)
   transposeUpButton.addEventListener(clickEventType, transposeUp)
