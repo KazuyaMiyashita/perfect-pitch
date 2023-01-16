@@ -139,18 +139,20 @@ const init = () => {
     if (!osmd.PlaybackManager) {
       alert('audio preparing..')
       return Promise.reject('audio preparing..')
+    }
+    if (context.state === "suspended") {
+      context.resume();
+    }
+
+    if (osmd.PlaybackManager.RunningState == PlaybackState.Stopped) {
+      console.log('play')
+      return osmd.PlaybackManager.play().then(() => {})
     } else {
-      return context.resume().then(() => {
-        if (osmd.PlaybackManager.RunningState == PlaybackState.Stopped) {
-          console.log('play')
-          return osmd.PlaybackManager.play().then(() => {})
-        } else {
-          console.log('stop')
-          return osmd.PlaybackManager.pause().then(() => osmd.PlaybackManager.reset())
-        }
-      })
+      console.log('stop')
+      return osmd.PlaybackManager.pause().then(() => osmd.PlaybackManager.reset())
     }
   }
+
 
   const clickEventType = ((window.ontouchstart !== null) ? 'click' : 'touchend');
   playStopButton.addEventListener(clickEventType, playStop)
