@@ -6,7 +6,6 @@
   "scripts": {
     "serve": "webpack serve --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "serve-sound": "webpack serve --config webpack.sound.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
