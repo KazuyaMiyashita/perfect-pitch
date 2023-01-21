@@ -12,7 +12,7 @@
   "private": true,
   "license": "UNLICENSED",
   "dependencies": {
-    "opensheetmusicdisplay": "git+ssh://git@github.com:opensheetmusicdisplay/osmd-extended.git"
+    "opensheetmusicdisplay": "^1.7.2"
   },
   "devDependencies": {
     "ts-loader": "^9.4.2",

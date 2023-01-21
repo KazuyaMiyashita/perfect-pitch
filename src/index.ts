@@ -1,40 +1,12 @@
 import {
-  BasicAudioPlayer,
-  IMessageViewer,
-  LinearTimingSource,
   MidiInstrument,
   OpenSheetMusicDisplay as OSMD,
-  PlaybackManager,
-  PlaybackState,
   TransposeCalculator,
 } from 'opensheetmusicdisplay'
 import {transposeMusicXML} from './transpose'
 
 const init = () => {
   console.log('init')
-
-  // Loading the sound source takes the most time, so do it first.
-  // The audio context is now in suspend state.
-  // Call resume() when the user clicks the play button.
-  const context = new AudioContext()
-  context.suspend().then(_ => {})
-
-  const basicAudioPlayer: Promise<BasicAudioPlayer> = (() => {
-    const nameToUrl = (name: string, font: string, format: string) => {
-      return `./soundfonts/${name}-mp3.js`
-    }
-    const basicAudioPlayer = new BasicAudioPlayer()
-    basicAudioPlayer.SoundfontInstrumentOptions.nameToUrl = nameToUrl
-    return Promise.all([
-      basicAudioPlayer.loadSoundFont(MidiInstrument.String_Ensemble_1),
-      basicAudioPlayer.loadSoundFont(MidiInstrument.Acoustic_Grand_Piano),
-      basicAudioPlayer.loadSoundFont(MidiInstrument.Church_Organ),
-      basicAudioPlayer.loadSoundFont(MidiInstrument.Choir_Aahs),
-      basicAudioPlayer.loadSoundFont(MidiInstrument.Pad_1_new_age),
-      basicAudioPlayer.loadSoundFont(MidiInstrument.Percussion), // PlaybackManager loads it
-      basicAudioPlayer.loadSoundFont(MidiInstrument.Woodblock), // PlaybackManager loads it
-    ]).then(() => basicAudioPlayer)
-  })()
 
   const sheets = [
     './sheets/chouon-001-four-staves.musicxml',
@@ -169,7 +141,7 @@ const init = () => {
       return osmd.load(transposed).then(() => {
         console.log(`${filename} loaded.`)
         osmd.render()
-        return setSheetPlaybackContent()
+        return
       })
     })
   }
@@ -179,64 +151,9 @@ const init = () => {
   taskSelector.selectedIndex = Math.floor(Math.random() * taskSelector.options.length)
   buttonDisabledOnLoading(loadCurrentSelectFile()).then(() => {})
 
-  const setSheetPlaybackContent = () => {
-    return basicAudioPlayer.then(bap => {
-      if (osmd.PlaybackManager) {
-        if (osmd.PlaybackManager.RunningState == PlaybackState.Running) {
-          osmd.PlaybackManager.pause().then(() => osmd.PlaybackManager.reset())
-        }
-      }
-
-      const timingSource = new LinearTimingSource()
-      const messageViewer: IMessageViewer = {
-        MessageOccurred: (tpe: any, mes: any) => {console.log(`message: tpe: ${tpe}, mes: ${mes}`)}
-      }
-
-      const playbackManager = new PlaybackManager(timingSource, undefined as any, bap, messageViewer)
-      playbackManager.DoPlayback = true
-      playbackManager.DoPreCount = false
-      playbackManager.PreCountMeasures = 1
-
-      timingSource.Settings = osmd.Sheet.SheetPlaybackSetting
-
-      const currentInstrument = currentSelectedInstrument()
-      // I want to use the specified sound source instead of using the sound source described in MusicXML.
-      // So overwrite the contents of the sheet
-      for (const instr of osmd.Sheet.Instruments) {
-        instr.MidiInstrumentId = currentInstrument
-      }
-
-      playbackManager.initialize(osmd.Sheet.MusicPartManager)
-      playbackManager.addListener(osmd.cursor)
-      osmd.PlaybackManager = playbackManager
-      console.log('setSheetPlaybackContent done')
-      return
-    })
-  }
-
-  instrumentSelector.addEventListener('change', () => buttonDisabledOnLoading(setSheetPlaybackContent()))
-
-  const playStop: () => Promise<void> = () => {
-    if (!osmd.PlaybackManager) {
-      alert('audio preparing..')
-      return Promise.reject('audio preparing..')
-    }
-    if (context.state === "suspended") {
-      context.resume();
-    }
-
-    if (osmd.PlaybackManager.RunningState == PlaybackState.Stopped) {
-      console.log('play')
-      return osmd.PlaybackManager.play().then(() => {})
-    } else {
-      console.log('stop')
-      return osmd.PlaybackManager.pause().then(() => osmd.PlaybackManager.reset())
-    }
-  }
 
 
   const clickEventType = ((window.ontouchstart !== null) ? 'click' : 'touchend');
-  playStopButton.addEventListener(clickEventType, playStop)
 
   const next = () => {
     transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
@@ -245,7 +162,7 @@ const init = () => {
       osmdRenderAreaAboveDiv.classList.add("hide-osmd")
     }
     if (autoPlayCheckbox.checked) {
-      return buttonDisabledOnLoading(loadCurrentSelectFile().then(() => playStop())).then(() => {})
+      return buttonDisabledOnLoading(loadCurrentSelectFile().then(() => {}))
     } else {
       return buttonDisabledOnLoading(loadCurrentSelectFile()).then(() => {})
     }
@@ -284,7 +201,7 @@ const init = () => {
 
   const keyup = (e: KeyboardEvent) => {
     if (e.code == 'Space') {
-      playStop().then(() => {})
+
     } else if (e.code == 'Enter') {
       switchShowHide()
     } else if (e.code == 'ArrowRight') {
