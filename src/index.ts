@@ -1,8 +1,6 @@
-import {
-  MidiInstrument,
-  OpenSheetMusicDisplay as OSMD,
-  TransposeCalculator,
-} from 'opensheetmusicdisplay'
+import {OpenSheetMusicDisplay as OSMD } from 'opensheetmusicdisplay'
+import MidiPlayer from 'midi-player-js';
+import Soundfont, {Player} from 'soundfont-player';
 import {transposeMusicXML} from './transpose'
 
 const init = () => {
@@ -99,28 +97,11 @@ const init = () => {
     drawPartNames: false,
   }
   const osmd: OSMD = new OSMD(osmdRenderAreaDiv, options)
-  osmd.TransposeCalculator = new TransposeCalculator()
 
   const getFileName = (task: string, staff: string) => {
     return `./sheets/${task}-${staff}.musicxml`
   }
 
-  const currentSelectedInstrument = () => {
-    const instrValue = instrumentSelector.options[instrumentSelector.selectedIndex].value
-    if (instrValue === 'String_Ensemble_1') {
-      return MidiInstrument.String_Ensemble_1
-    } else if (instrValue === 'Acoustic_Grand_Piano') {
-      return MidiInstrument.Acoustic_Grand_Piano
-    } else if (instrValue === 'Church_Organ') {
-      return MidiInstrument.Church_Organ
-    } else if (instrValue === 'Choir_Aahs') {
-      return MidiInstrument.Choir_Aahs
-    } else if (instrValue === 'Pad_1_new_age') {
-      return MidiInstrument.Pad_1_new_age
-    } else {
-      throw Error('unknown instrument!')
-    }
-  }
 
   const buttonDisabledOnLoading = <T>(promise: Promise<T>) => {
     playStopButton.disabled = true
@@ -153,7 +134,52 @@ const init = () => {
 
 
 
+
+  const audioContext = new AudioContext()
+  audioContext.suspend().then(()=>{})
+
+  // // acoustic_grand_piano, string_ensemble_1
+  var instrument: Player | null = null
+  console.log("soundfont instrument loading.")
+  Soundfont.instrument(audioContext, 'acoustic_grand_piano').then(p => {
+    instrument = p
+    console.log("soundfont instrument loaded.")
+  })
+
+  const midiPlay = () => {
+    if (instrument === null) {
+      console.log("soundfont instrument has not been loaded.")
+      return
+    }
+
+    audioContext.resume().then(() => {})
+
+
+    const player = new MidiPlayer.Player((event: any) => {
+      if (instrument === null) {
+        console.log("soundfont instrument has not been loaded.")
+        return
+      }
+
+      console.log(event)
+
+      if (event.name == 'Note on') {
+        instrument.play(event.noteName, audioContext.currentTime, {gain:event.velocity/100});
+        //document.querySelector('#track-' + event.track + ' code').innerHTML = JSON.stringify(event);
+      }
+
+      return
+    })
+
+    player.loadDataUri('data:audio/midi;base64,TVRoZAAAAAYAAQAFA8BNVHJrAAAAHgD/WAQDAhgIAP9ZAgAAAP9RAwknwAD/AwExAf8vAE1UcmsAAAA2AMAwALB5AACwQAAAsFsYALAKEACwB2QAkEpRjwCASgAAkEdLh0CARwAAkEhRlkCASAAB/y8ATVRyawAAADYAwzAAs3kAALNAAACzWxgAswpvALMHXwCTRVGPAINFAACTQ0yHQINDAACTQ1GWQINDAAH/LwBNVHJrAAAANgDBMACxeQAAsUAAALFbGACxCiAAsQdaAJFBUY8AgUEAAJE+S4dAgT4AAJFAUpZAgUAAAf8vAE1UcmsAAAA2AMIwALJ5AACyQAAAslsYALIKXwCyB1oAkjJRjwCCMgAAkjdNh0CCNwAAkjBOlkCCMAAB/y8A')
+    player.play()
+
+
+  }
+
   const clickEventType = ((window.ontouchstart !== null) ? 'click' : 'touchend');
+  playStopButton.addEventListener(clickEventType, midiPlay)
+
 
   const next = () => {
     transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
