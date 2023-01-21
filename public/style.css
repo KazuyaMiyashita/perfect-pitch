@@ -23,3 +23,7 @@ div#osmd-render-area-above {
 .hide-osmd {
     background-color: #f0f0f0;
 }
+
+.hidden-debug {
+    display: none
+}

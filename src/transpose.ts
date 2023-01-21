@@ -1,6 +1,6 @@
-type Pitch = {octave: number, fifth: number}
+type Pitch = { octave: number, fifth: number }
 
-type MusicXMLPitch = { step: string, octave: number, alter: number}
+type MusicXMLPitch = { step: string, octave: number, alter: number }
 
 function dom2musicXmlPitch(dom: XMLDocument): MusicXMLPitch {
   const alterDom = dom.querySelector("alter");
@@ -130,6 +130,28 @@ function _transposeMusicXML(_xml: XMLDocument, transp: Pitch, dropStemElement: b
   const fifthsElems: Element[] = Array.from(xml.querySelectorAll("fifths").values());
   fifthsElems.forEach(fifthsElem => {
     fifthsElem.textContent = (parseInt(fifthsElem.textContent!) + transp.fifth).toString()
+  })
+
+  // accidental
+  // If note has accidental, reassign it according to pitch alter
+  // @ts-ignore
+  const noteElems: Element[] = Array.from(xml.querySelectorAll("note").values());
+  noteElems.forEach(noteElem => {
+    const accidentalElem = noteElem.querySelector("accidental")
+    const alter = noteElem.querySelector("alter")
+    if (accidentalElem != null) {
+      if (alter == null || alter.textContent == "0") {
+        accidentalElem.textContent = "natural"
+      } else if (alter.textContent == "1") {
+        accidentalElem.textContent = "sharp"
+      } else if (alter.textContent == "2") {
+        accidentalElem.textContent = "double-sharp"
+      } else if (alter.textContent == "-1") {
+        accidentalElem.textContent = "flat"
+      } else if (alter.textContent == "-2") {
+        accidentalElem.textContent = "flat-flat"
+      }
+    }
   })
 
   if (dropStemElement) {
