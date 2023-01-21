@@ -8,6 +8,7 @@ import {
   PlaybackState,
   TransposeCalculator,
 } from 'opensheetmusicdisplay'
+import {transposeMusicXML} from './transpose'
 
 const init = () => {
   console.log('init')
@@ -164,12 +165,9 @@ const init = () => {
     const filename = getFileName(task, staff)
     return sheetDocumentsPromise.then(sheetDocuments => {
       const doc: Document = sheetDocuments.get(filename)!
-      return osmd.load(doc).then(() => {
+      const transposed = transposeMusicXML(doc, parseInt(transposeInput.value), (staff === 'four-staves'))
+      return osmd.load(transposed).then(() => {
         console.log(`${filename} loaded.`)
-
-        osmd.Sheet.Transpose = parseInt(transposeInput.value)
-        osmd.updateGraphic()
-
         osmd.render()
         return setSheetPlaybackContent()
       })
@@ -178,6 +176,7 @@ const init = () => {
   taskSelector.addEventListener('change', () => buttonDisabledOnLoading(loadCurrentSelectFile()))
   staffSelector.addEventListener('change', () => buttonDisabledOnLoading(loadCurrentSelectFile()))
 
+  taskSelector.selectedIndex = Math.floor(Math.random() * taskSelector.options.length)
   buttonDisabledOnLoading(loadCurrentSelectFile()).then(() => {})
 
   const setSheetPlaybackContent = () => {
@@ -252,7 +251,6 @@ const init = () => {
     }
   }
   transposeInput.value = (Math.floor(Math.random() * (6 - (-5) + 1) + (-5))).toString()
-  taskSelector.selectedIndex = Math.floor(Math.random() * taskSelector.options.length)
   nextButton.addEventListener(clickEventType, next)
 
 
@@ -266,13 +264,8 @@ const init = () => {
   showHideButton.addEventListener(clickEventType, switchShowHide)
 
   const transpose = (num: number) => {
-    const value = Math.floor(num)
     transposeInput.value = num.toString()
-    osmd.Sheet.Transpose = value
-    osmd.updateGraphic()
-
-    osmd.render()
-    return setSheetPlaybackContent()
+    return loadCurrentSelectFile()
   }
 
   const transposeRandom = () => {
