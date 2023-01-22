@@ -3,8 +3,6 @@ import MidiPlayer from 'midi-player-js';
 import Soundfont, {InstrumentName} from "soundfont-player";
 import {transposeMusicXML} from './transpose'
 
-import './style.scss';
-
 const init = () => {
   console.log('init2')
 
@@ -74,6 +72,7 @@ const init = () => {
     autoResize: true,
     drawTitle: false,
     drawPartNames: false,
+    measureNumberInterval: 9999
   }
   const osmd: OSMD = new OSMD(osmdRenderAreaDiv, options)
 

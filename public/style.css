@@ -1,0 +1,32 @@
+div#osmd-render-area-wrapper {
+    position: relative;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    border-radius: 5px;
+    /*height: 350px;*/
+    overflow-x: scroll;
+}
+
+div#osmd-render-area {
+    width: 100%;
+}
+
+div#osmd-render-area-above {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hide-osmd {
+    background-color: #f0f0f0;
+}
+
+.hidden-debug {
+    display: none
+}
+
+.title {
+    text-align: center;
+    white-space: nowrap;
+    font-size: min(5vw, 2.5rem);
+}
