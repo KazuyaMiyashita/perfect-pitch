@@ -1,7 +1,4 @@
-/** {*/
-/*    margin: 0;*/
-/*    padding: 0;*/
-/*}*/
+
 
 div#osmd-render-area-wrapper {
     position: relative;
@@ -26,4 +23,15 @@ div#osmd-render-area-above {
 
 .hidden-debug {
     display: none
+}
+
+$p_color: green;
+$p_bg_color: red;
+
+
+
+
+p {
+    color: $p_color;
+    background-color: $p_bg_color;
 }

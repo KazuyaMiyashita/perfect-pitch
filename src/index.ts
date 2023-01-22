@@ -3,8 +3,11 @@ import MidiPlayer from 'midi-player-js';
 import Soundfont, {InstrumentName} from "soundfont-player";
 import {transposeMusicXML} from './transpose'
 
+import './style.scss';
+
 const init = () => {
-  console.log('init')
+  console.log('init2')
+
 
   const getElementByIdOrError = (elementId: string) => {
     const element = document.getElementById(elementId)
