@@ -12,6 +12,7 @@
   "private": true,
   "license": "UNLICENSED",
   "dependencies": {
+    "bootstrap": "^5.2.3",
     "midi-player-js": "^2.0.16",
     "opensheetmusicdisplay": "^1.7.2",
     "soundfont-player": "^0.12.0"
