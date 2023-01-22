@@ -49,16 +49,17 @@
             </div>
             <div class="col-2">
                 <select id="instrument-selector" class="form-select w-100">
-                    <option value="String_Ensemble_1">String Ensemble</option>
-                    <option value="Acoustic_Grand_Piano">Acoustic Grand Piano</option>
-                    <option value="Church_Organ">Church Organ</option>
-                    <option value="Choir_Aahs">Choir Aahs</option>
-                    <option value="Pad_1_new_age">Synth Pad</option>
+                    <option value="string_ensemble_1">String Ensemble</option>
+                    <option value="acoustic_grand_piano">Acoustic Grand Piano</option>
+                    <option value="church_organ">Church Organ</option>
                 </select>
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <input type="number" id="transpose-input" value="0" class="hidden-debug">
-                <button id="play-stop" class="btn btn-primary w-100" disabled>Play/Stop</button>
+                <button id="play" class="btn btn-primary w-100" disabled>Play</button>
+            </div>
+            <div class="col-1">
+                <button id="stop" class="btn btn-primary w-100">Stop</button>
             </div>
             <div class="col-2">
                 <button id="show-hide" class="btn btn-outline-primary w-100">Show/Hide</button>
@@ -95,7 +96,7 @@
         <div id="osmd-render-area-above"></div>
         <div id="osmd-render-area"></div>
     </div>
-    <div>20230121.002</div>
+    <div>20230122.001</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
