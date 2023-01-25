@@ -1,26 +1,4 @@
 
-div#osmd-render-area {
-    width: 500%;
-    /*transform: scale(1);*/
-    overflow-x: scroll;
-    /*border: 1px solid black;*/
-    margin: 0;
-    padding: 0;
-}
-
-/*div#osmd-render-area-above {*/
-/*    position: absolute;*/
-/*    width: 100%;*/
-/*    height: 100%;*/
-/*    z-index: 1;*/
-/*}*/
-
-.hide-osmd {
-    background-color: #f0f0f0;
-}
-
-/* */
-
 /* Rules for sizing the icon. */
 /* https://developers.google.com/fonts/docs/material_icons#:~:text=255%2C%200.3)%3B%20%7D-,Sizing,The%20default%20being%2024px. */
 .material-icons.md-18 { font-size: 18px; }
@@ -32,6 +10,19 @@ div#osmd-render-area {
 .material-icons-outlined.md-24 { font-size: 24px; }
 .material-icons-outlined.md-36 { font-size: 36px; }
 .material-icons-outlined.md-48 { font-size: 48px; }
+
+/* bootstrap large form switch */
+/* cf https://stackoverflow.com/questions/55593229/increasing-the-size-of-a-bootstrap-checkbox */
+
+.form-switch.form-switch-lg {
+    margin-bottom: 1.5rem; /* JUST FOR STYLING PURPOSE */
+}
+
+.form-switch.form-switch-lg .form-check-input {
+    height: 2rem;
+    width: calc(3rem + 0.75rem);
+    border-radius: 4rem;
+}
 
 /* */
 
@@ -94,18 +85,34 @@ body {
 
 
 .my-main-content-area {
+    position: relative;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
     border-radius: 5px;
-    /*height: 100%;*/
     padding-bottom: 5rem;
-    /* 9rem = .my-top-area の height + .my-bottom-area の height + このmargin-top + margin-bottom */
-    /* だが、スマホのビューポート難しいので + 6rem 入れる*/
     overflow-y: scroll;
-    /*margin-top: 1rem;*/
-    /*margin-bottom: 1rem;*/
-    /*padding-left: 2rem;*/
-
 }
+
+div#osmd-render-area {
+    margin: 0;
+    padding: 0;
+}
+
+div#osmd-render-area-above {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    text-align: center;
+    color: gray;
+}
+
+.hide-osmd {
+    background-color: #f0f0f0;
+}
+
 
 /* bottom */
 
@@ -145,7 +152,6 @@ body {
     padding: 0;
     vertical-align: bottom;
 }
-
 
 .my-play-button {
     width: 4rem;

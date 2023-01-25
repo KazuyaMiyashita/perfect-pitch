@@ -21,7 +21,6 @@ const init = () => {
   const transposeInput = getElementByIdOrError('transpose-input') as HTMLButtonElement
   const playButton = document.getElementById('play') as HTMLButtonElement
   const stopButton = document.getElementById('stop') as HTMLButtonElement
-  const showHideButton = document.getElementById('show-hide') as HTMLButtonElement
   const transposeDownButton = getElementByIdOrError('transpose-down') as HTMLButtonElement
   const transposeRandomButton = getElementByIdOrError('transpose-random') as HTMLButtonElement
   const transposeUpButton = getElementByIdOrError('transpose-up') as HTMLButtonElement
@@ -29,6 +28,11 @@ const init = () => {
   const autoHideCheckbox = document.getElementById('auto-hide') as HTMLInputElement
   const autoPlayCheckbox = document.getElementById('auto-play') as HTMLInputElement
 
+  const zoomBreakPoint = 576 // bootstrap sm
+  let zoomFactor = 1;
+  if (window.innerWidth < zoomBreakPoint) {
+    zoomFactor = 0.75
+  }
 
   const getSheetFileName = (task: string, staff: string) => {
     return `./sheets/${task}-${staff}.musicxml`
@@ -95,6 +99,7 @@ const init = () => {
       const transposed = transposeMusicXML(doc, parseInt(transposeInput.value), (staff === 'four-staves'))
       return osmd.load(transposed).then(() => {
         console.log(`${filename} loaded.`)
+        osmd.zoom = zoomFactor;
         osmd.render()
         return
       })
@@ -245,7 +250,7 @@ const init = () => {
       osmdRenderAreaAboveDiv.classList.add("hide-osmd")
     }
   }
-  showHideButton.addEventListener(clickEventType, switchShowHide)
+  osmdRenderAreaAboveDiv.addEventListener(clickEventType, switchShowHide)
 
   const transpose = (num: number) => {
     midiStop();

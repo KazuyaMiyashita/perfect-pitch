@@ -30,6 +30,9 @@
         </button>
     </div>
     <div class="my-main-content-area">
+        <div id="osmd-render-area-above">
+             Tap to show / hide sheet music
+        </div>
         <div id="osmd-render-area"></div>
     </div>
 </div>
@@ -61,7 +64,7 @@
             <div class="row mb-2">
                 <label for="auto-hide" class="col-3 col-form-label">Auto hide</label>
                 <div class="col-9">
-                    <div class="form-check form-switch">
+                    <div class="form-check form-switch form-switch-lg">
                         <input class="form-check-input" type="checkbox" value="" id="auto-hide">
                     </div>
                 </div>
@@ -70,13 +73,13 @@
             <div class="row mb-2">
                 <label for="auto-play" class="col-3 col-form-label">Auto play</label>
                 <div class="col-9">
-                    <div class="form-check form-switch">
+                    <div class="form-check form-switch form-switch-lg">
                         <input class="form-check-input" type="checkbox" value="" id="auto-play">
                     </div>
                 </div>
             </div>
 
-            <div class="version-info">20230125.001</div>
+            <div class="version-info">20230126.001</div>
             <hr>
         </div>
     </div>
@@ -104,7 +107,6 @@
     </div>
 </div>
 <div style="display: none">
-    <div id="osmd-render-area-above"></div>
     <select id="task-selector">
         <option value="chouon-001">chouon-001</option>
         <option value="chouon-002">chouon-002</option>
@@ -133,7 +135,6 @@
         <option value="chouon-065">chouon-065</option>
     </select>
     <input type="number" id="transpose-input" value="0">
-    <button id="show-hide" class="btn btn-outline-primary w-100">Show/Hide</button>
     <button id="stop" class="btn btn-primary w-100">
         <span class="material-icons-outlined" style="vertical-align: bottom;">pause</span>
         Stop
