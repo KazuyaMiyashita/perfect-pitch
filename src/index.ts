@@ -270,4 +270,4 @@ const init = () => {
 
 }
 
-// init()
+init()

@@ -1,16 +1,9 @@
-div#osmd-render-area-wrapper {
-    position: relative;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    border-radius: 5px;
-    /*height: 350px;*/
-    overflow-x: scroll;
-}
 
 div#osmd-render-area {
-    width: 200%;
-    transform: scale(1);
+    width: 500%;
+    /*transform: scale(1);*/
     overflow-x: scroll;
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     margin: 0;
     padding: 0;
 }
@@ -26,91 +19,6 @@ div#osmd-render-area {
     background-color: #f0f0f0;
 }
 
-.hidden-debug {
-    display: none
-}
-
-.title {
-    text-align: center;
-    white-space: nowrap;
-    font-size: min(5vw, 2.5rem);
-}
-
-
-.controller {
-    position: absolute;
-    z-index: 100;
-    width: 100vw;
-    height: 100vh;
-    left: 0;
-    top: 0;
-    margin: 0;
-    padding: 0;
-    background-color: pink;
-    opacity: 20%;
-
-    pointer-events: none;
-}
-
-.controller-columns {
-    z-index: 100;
-    width: auto;
-    margin: 0;
-    padding: 0;
-}
-
-.prev-right-transition-area {
-    z-index: 100;
-    height: calc(100vh - 60px);
-}
-
-.controller-left {
-    z-index: 100;
-    width: 20px;
-    height: calc(100vh - 60px);
-    margin: 0;
-    padding: 0;
-    background-color: blue;
-}
-
-.controller-middle {
-    z-index: 100;
-    width: auto;
-    height: calc(100vh - 60px);
-    pointer-events: fill;
-    margin: 0;
-    padding: 0;
-}
-
-.controller-right {
-    z-index: 100;
-    width: 20px;
-    height: calc(100vh - 60px);
-    margin: 0;
-    padding: 0;
-    background-color: blue;
-}
-
-.play-stop-area {
-    position: fixed;
-    bottom: 0;
-
-    z-index: 100;
-
-    width: 100vw;
-    height: 60px;
-    background-color: red;
-}
-
-.play-stop-button-area {
-    z-index: 100;
-
-    width: 60px;
-    height: 60px;
-
-    margin: 0 0 0 auto;
-}
-
 /* */
 
 /* Rules for sizing the icon. */
@@ -120,12 +28,22 @@ div#osmd-render-area {
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
 
+.material-icons-outlined.md-18 { font-size: 18px; }
+.material-icons-outlined.md-24 { font-size: 24px; }
+.material-icons-outlined.md-36 { font-size: 36px; }
+.material-icons-outlined.md-48 { font-size: 48px; }
+
 /* */
 
+body {
+    touch-action: manipulation; /* iOSのダブルタップの拡大を無効にする */
+}
+
 .my-top-area {
+    margin: 0;
+    padding: 0;
     height: 3rem;
     width: 100%;
-    background-color: pink;
 }
 
 .my-title {
@@ -139,45 +57,107 @@ div#osmd-render-area {
 }
 
 .my-top-area-padding {
+    margin: 0;
+    padding: 0;
     height: 3rem; /* .my-top-area の height と同じ */
 }
 
-.my-bottom-area {
-    height: 5rem;
-    width: 100%;
 
+.my-middle-area {
+    position: relative;
+    margin: 0;
+    padding: 1rem;
+    height: calc(100dvh - 3rem); /* .my-top-area の height 分引く */
+}
+
+.my-main-content-left-floating {
+    position: absolute;
+    z-index: 100;
+    left: 0;
+    bottom: 50%;
+    margin: 0;
+    width: 4rem;
+    height: 4rem;
+    background-color: white;
+}
+
+.my-main-content-right-floating {
+    position: absolute;
+    z-index: 100;
+    right: 0;
+    bottom: 50%;
+    margin: 0;
+    width: 4rem;
+    height: 4rem;
+    background-color: white;
+}
+
+
+.my-main-content-area {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    border-radius: 5px;
+    /*height: 100%;*/
+    padding-bottom: 5rem;
+    /* 9rem = .my-top-area の height + .my-bottom-area の height + このmargin-top + margin-bottom */
+    /* だが、スマホのビューポート難しいので + 6rem 入れる*/
+    overflow-y: scroll;
+    /*margin-top: 1rem;*/
+    /*margin-bottom: 1rem;*/
+    /*padding-left: 2rem;*/
+
+}
+
+/* bottom */
+
+.my-bottom-area {
+    /*height: 5rem;*/
+    /*width: 100%;*/
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 
-
     background-color: white;
-    /*opacity: 50%;*/
+    opacity: 90%;
+}
 
+/* 最初は隠れていて歯車アイコンでニョキっと生えてくる部分 */
+.my-bottom-setting-area-1 {
+    /*width: 100%*/
+}
+
+/* 画面下部の歯車アイコンや移調、再生ボタンがある部分。常に見えている。 */
+.my-bottom-setting-area-2 {
     display: flex;
     justify-content: space-between;
 }
 
-.my-play-button-area {
-    margin: 0 0 0 auto;
+.my-setting-button {
+    width: 4rem;
+    height: 4rem;
 }
+
+.my-setting-button.collapsed {
+    transform: rotate(-180deg);
+}
+
+.my-setting-icon {
+    margin: 0;
+    padding: 0;
+    vertical-align: bottom;
+}
+
+
 .my-play-button {
     width: 4rem;
     height: 4rem;
-    margin-right: 1rem;
-    margin-bottom: 1rem;
 }
+
 .my-play-icon {
     margin: 0;
     padding: 0;
     vertical-align: bottom;
 }
 
-.my-main-content-area {
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    border-radius: 5px;
-    height: calc(100vh - 15rem);
-    /* 9rem = .my-top-area の height + .my-bottom-area の height + このmargin-top + margin-bottom */
-    /* だが、スマホのビューポート難しいので + 6rem 入れる*/
-    overflow-y: scroll;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+.version-info {
+    color: gray;
 }
