@@ -250,7 +250,26 @@ const init = () => {
       osmdRenderAreaAboveDiv.classList.add("hide-osmd")
     }
   }
-  osmdRenderAreaAboveDiv.addEventListener(clickEventType, switchShowHide)
+  // スマホではタップした時にスクロールしようとしていない時に限り表示・非表示を変える
+  var touchEndWithoutMoveShouldDoRun: boolean = true;
+  const touchEndWithoutMove = (event: TouchEvent, run: () => void) => {
+    if (event.type == 'touchstart') {
+      touchEndWithoutMoveShouldDoRun = true
+    } else if (event.type == 'touchmove') {
+      touchEndWithoutMoveShouldDoRun = false
+    }
+    if (event.type == 'touchend' && touchEndWithoutMoveShouldDoRun) {
+      run()
+    }
+  }
+  if (clickEventType == 'click') {
+    osmdRenderAreaAboveDiv.addEventListener(clickEventType, switchShowHide)
+  } else {
+    const switchShowHideSwitchShowHide = (e: TouchEvent) => touchEndWithoutMove(e, switchShowHide)
+    osmdRenderAreaAboveDiv.addEventListener('touchstart', switchShowHideSwitchShowHide)
+    osmdRenderAreaAboveDiv.addEventListener('touchmove', switchShowHideSwitchShowHide)
+    osmdRenderAreaAboveDiv.addEventListener('touchend', switchShowHideSwitchShowHide)
+  }
 
   const transpose = (num: number) => {
     midiStop();
