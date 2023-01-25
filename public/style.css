@@ -44,7 +44,7 @@ body {
     height: 100%;
     margin: 0;
     white-space: nowrap;
-    font-size: min(5vw, 1.5rem);
+    font-size: min(4vw, 1.2rem);
 }
 
 .my-top-area-padding {
