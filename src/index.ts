@@ -30,7 +30,8 @@ const init = () => {
 
   const zoomBreakPoint = 576 // bootstrap sm
   let zoomFactor = 1;
-  if (window.innerWidth < zoomBreakPoint) {
+  // スマホ横向きだと楽譜の縦が収まらないので、高さも見る
+  if (Math.min(window.innerWidth, window.innerHeight) < zoomBreakPoint) {
     zoomFactor = 0.75
   }
 
